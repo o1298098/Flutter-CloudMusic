@@ -1,16 +1,20 @@
 # cloudmusic
 
-A new Flutter project.
+A flutter version of the NeteaseCloudMusic app.
 
-## Getting Started
+## Preview  
+![image](https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/Screenshot.gif)  
+### android  
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/droid01.jpg" width="250">
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/droid02.jpg" width="250">
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/droid03.jpg" width="250">  
+### ios  
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/ios01.PNG" width="250">
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/ios02.PNG" width="250">
+<img src="https://github.com/o1298098/Flutter-CloudMusic/blob/master/Screenshot/ios03.PNG" width="250">  
+## Features  
+- [x] AudioPlayer  
+- [ ] VideoPlayer
+- [ ] AudioVisualizer
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
