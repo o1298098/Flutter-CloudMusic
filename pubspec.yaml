@@ -33,6 +33,7 @@ dependencies:
   transparent_image: ^1.0.0
   audioplayer: ^0.5.2
   share: ^0.6.1
+  intl: ^0.15.8
 
 dev_dependencies:
   flutter_test:

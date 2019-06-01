@@ -31,7 +31,7 @@ class PersonalizedModel {
 class PersonalizedData {
 
   int id;
-  Object playCount;
+  int playCount;
   int trackCount;
   int type;
   bool canDislike;
@@ -45,7 +45,7 @@ class PersonalizedData {
   
   PersonalizedData.fromJson(jsonRes) {
     id = jsonRes['id'];
-    playCount = jsonRes['playCount'];
+    playCount = int.tryParse(jsonRes['playCount'].toString())??double.tryParse(jsonRes['playCount'].toString()).round();
     trackCount = jsonRes['trackCount'];
     type = jsonRes['type'];
     canDislike = jsonRes['canDislike'];

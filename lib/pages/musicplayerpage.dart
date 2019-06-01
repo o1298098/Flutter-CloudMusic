@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
+import 'package:cloudmusic/actions/counTostr.dart';
 import 'package:cloudmusic/pages/songcommentpage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/model/model.dart';
@@ -19,6 +20,7 @@ class MusicPlayerPage extends StatefulWidget {
 class MusicPlayerState extends State<MusicPlayerPage>
     with TickerProviderStateMixin {
   int musicindex = 0;
+  int commentcount = 0;
   MusicPlayList playList;
   MusicPlayerState({this.playList});
   AnimationController animationController;
@@ -74,13 +76,21 @@ class MusicPlayerState extends State<MusicPlayerPage>
     });
   }
 
-  void loadData() async {}
+  Future<void> loadComment(int i) async {
+    var r = await CloudMusicApiHelper.songComments(
+        playList.playlist.tracks[i].id, 1,0);
+    commentcount = r.total;
+  }
+
   void chageMusic(int i) async {
+    if(i>=playList.playlist.trackCount-1)
+    return;
     await stop();
     await play('https://music.163.com/song/media/outer/url?id=' +
         playList.playlist.tracks[i].id.toString() +
         '.mp3');
     await discController.move(i);
+    await loadComment(i);
     setState(() {
       musicindex = i;
       precacheImage(
@@ -366,6 +376,7 @@ class MusicPlayerState extends State<MusicPlayerPage>
         vsync: this, duration: Duration(milliseconds: 500));
     needleAnimation =
         Tween(begin: -0.09, end: 0.0).animate(needleAnimationController);
+    loadComment(0);
   }
 
   @override
@@ -394,7 +405,7 @@ class MusicPlayerState extends State<MusicPlayerPage>
             ),
           )),
           Container(
-              height: Adapt.px(850),
+              height: Adapt.px(830),
               margin: EdgeInsets.only(top: Adapt.px(230)),
               child: Center(
                 child: Image(
@@ -407,7 +418,7 @@ class MusicPlayerState extends State<MusicPlayerPage>
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                height: Adapt.px(850),
+                height: Adapt.px(830),
                 margin: EdgeInsets.only(top: Adapt.px(230)),
                 child: new Swiper(
                   controller: discController,
@@ -441,15 +452,28 @@ class MusicPlayerState extends State<MusicPlayerPage>
                       onPressed: () {},
                       iconSize: 25,
                       icon: Icon(Icons.hearing, color: Colors.white)),
-                  IconButton(
-                      onPressed: () async {
-                        await Navigator.push(context, new MaterialPageRoute(
-                            builder: (BuildContext context) {
-                          return new SongCommentPage();
-                        }));
-                      },
-                      iconSize: 25,
-                      icon: Icon(Icons.comment, color: Colors.white)),
+                  Stack(
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () async {
+                            await Navigator.push(context, new MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return new SongCommentPage(id:playList.playlist.tracks[musicindex].id);
+                            }));
+                          },
+                          iconSize: 25,
+                          icon: Icon(Icons.comment, color: Colors.white)),
+                      Container(
+                        width: Adapt.px(85),
+                        alignment: Alignment.bottomRight,
+                        //color: Colors.white,
+                        child: Text(
+                          CountTostr.commentCountChange(commentcount),
+                          style: TextStyle(color: Colors.white,fontSize: Adapt.px(18)),
+                        ),
+                      )
+                    ],
+                  ),
                   IconButton(
                       onPressed: () => _modalBottomSheetMenu(),
                       iconSize: 25,

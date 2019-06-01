@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
+import 'package:cloudmusic/actions/counTostr.dart';
 import 'package:cloudmusic/model/model.dart';
 import 'package:cloudmusic/pages/musicplayerpage.dart';
 import 'package:flutter/material.dart';
@@ -200,8 +201,7 @@ class PlayListPageState extends State<PlayListPage> {
                                                   size: 18,
                                                 ),
                                                 Text(
-                                                    s.playlist.playCount
-                                                        .toString(),
+                                                    CountTostr.chage(s.playlist.playCount),
                                                     style: TextStyle(
                                                         color: Colors.white)),
                                               ],

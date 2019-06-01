@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloudmusic/actions/counTostr.dart';
 import 'package:cloudmusic/pages/playlistpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -377,6 +378,7 @@ class ImageviewState extends State<Imageview> {
       height: Adapt.px(250),
       margin: EdgeInsets.only(bottom: 15),
       child: new Swiper(
+          viewportFraction: 0.9999,
           autoplay: true,
           loop: true,
           pagination: new SwiperPagination(),
@@ -438,7 +440,7 @@ class PersonalizedGroupState extends State<PersonalizedGroup> {
                             color: Colors.white,
                             size: 18,
                           ),
-                          Text(s.result[index].playCount.toString(),
+                          Text(CountTostr.chage(s.result[index].playCount),
                               style: TextStyle(color: Colors.white)),
                         ],
                       ),

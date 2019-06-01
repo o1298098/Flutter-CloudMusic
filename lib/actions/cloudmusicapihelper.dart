@@ -32,6 +32,11 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return MusicPlayList(str);
   }
+  static Future<SongCommentModel> songComments(int id,int limit,int offset) async {
+     String param = '/comment/music?id=$id&limit=$limit&offset=$offset';
+    var str = await httpGet(param);
+    return SongCommentModel(str);
+  }
 
   static Future<String> httpGet(String params) async {
     var dio = new Dio();
