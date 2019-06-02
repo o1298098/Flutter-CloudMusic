@@ -1,4 +1,5 @@
 import 'dart:convert' show json;
+import 'package:cloudmusic/model/enum/commentliketype.dart';
 import 'package:dio/dio.dart';
 import 'package:cloudmusic/model/model.dart';
 
@@ -36,6 +37,13 @@ class CloudMusicApiHelper {
      String param = '/comment/music?id=$id&limit=$limit&offset=$offset';
     var str = await httpGet(param);
     return SongCommentModel(str);
+  }
+
+  static Future<void> clickLike(int id,int cid,bool like,CommentLikeType type)
+  async{
+    String t=like?'1':'0';
+    String param='/comment/like?id=$id&cid=$cid&$t=1&type='+type.index.toString();
+    await httpGet(param);
   }
 
   static Future<String> httpGet(String params) async {

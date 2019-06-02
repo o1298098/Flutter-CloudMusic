@@ -1,8 +1,10 @@
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
+import 'package:cloudmusic/actions/timeline.dart';
+import 'package:cloudmusic/model/enum/commentliketype.dart';
 import 'package:cloudmusic/model/model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:common_utils/common_utils.dart';
 
 class SongCommentPage extends StatefulWidget {
   final int id;
@@ -17,8 +19,8 @@ class SongCommentState extends State<SongCommentPage> {
   int limit = 50;
   int commentcount = 0;
   int hotCommentCount = 0;
+  int _locTime = DateTime.now().millisecondsSinceEpoch;
   bool isBusy = false;
-  var formatter = new DateFormat('yyyy年MM月dd日');
   ScrollController scrollController = new ScrollController();
   SongCommentModel _songCommentModel;
   void loadComment() async {
@@ -69,44 +71,97 @@ class SongCommentState extends State<SongCommentPage> {
               width: Adapt.px(15),
             ),
             Container(
-              width: Adapt.screenW() * 0.8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    c.user.nickname,
-                    style: TextStyle(fontSize: Adapt.px(24)),
-                  ),
-                  Text(
-                    formatter
-                        .format(DateTime.fromMillisecondsSinceEpoch(c.time)),
-                    style: TextStyle(fontSize: Adapt.px(18)),
-                  ),
-                  SizedBox(
-                    height: Adapt.px(10),
-                  ),
-                  Text(
-                    c.content,
-                    softWrap: true,
-                    style:
-                        TextStyle(height: Adapt.px(3), color: Colors.black, fontSize: Adapt.px(28)),
-                  ),
-                  SizedBox(
-                    height: Adapt.px(20),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  )
-                ],
-              ),
-            )
+                width: Adapt.screenW() * 0.8,
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          c.user.nickname,
+                          style: TextStyle(fontSize: Adapt.px(24)),
+                        ),
+                        Text(
+                          TimelineUtil.format(
+                            c.time,
+                            locTimeMillis: _locTime,
+                            locale: 'zh_cloudmusic',
+                          ),
+                          style: TextStyle(fontSize: Adapt.px(18)),
+                        ),
+                        SizedBox(
+                          height: Adapt.px(10),
+                        ),
+                        Text(
+                          c.content,
+                          softWrap: true,
+                          style: TextStyle(
+                              height: Adapt.px(2),
+                              color: Colors.black,
+                              fontSize: Adapt.px(28)),
+                        ),
+                        SizedBox(
+                          height: Adapt.px(20),
+                        ),
+                        Container(
+                          color: Colors.grey[200],
+                          height: 1,
+                        )
+                      ],
+                    ),
+                    Container(
+                      height: Adapt.px(50),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Center(
+                            child: Text(
+                              c.likedCount > 0 ? c.likedCount.toString() : '',
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: Adapt.px(20)),
+                            ),
+                          ),
+                          Container(
+                            width: Adapt.px(40),
+                            child: IconButton(
+                              color:
+                                  c.liked ? Colors.red[400] : Colors.grey[400],
+                              padding: EdgeInsets.all(2),
+                              alignment: Alignment.centerRight,
+                              icon: Icon(Icons.thumb_up),
+                              iconSize: Adapt.px(30),
+                              onPressed: () {
+                                int count = c.likedCount;
+                                if (!c.liked) {
+                                  count++;
+                                } else if (count > 0) {
+                                  count--;
+                                }
+                                CloudMusicApiHelper.clickLike(
+                                    id,
+                                    c.commentId,
+                                    !c.liked,
+                                    CommentLikeType.song);
+                                setState(() {
+                                  c.likedCount = count;
+                                  c.liked = !c.liked;
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ))
           ],
         ));
   }
 
   @override
   void initState() {
+    setLocaleInfo('zh_cloudmusic', CloudMusicTimelineInfoCN());
     id = widget.id;
     scrollController.addListener(scrollUpover);
     loadComment();
