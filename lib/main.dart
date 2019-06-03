@@ -1,3 +1,4 @@
+import 'package:cloudmusic/pages/startpage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/pages/discoverpage.dart';
 import 'package:cloudmusic/pages/userpage.dart';
@@ -8,7 +9,9 @@ import 'package:cloudmusic/pages/friendeventpage.dart';
 void main() {
   runApp(new MaterialApp(
     title: 'Flutter Tutorial',
-    theme: ThemeData(canvasColor: Colors.transparent,),
+    theme: ThemeData(
+      canvasColor: Colors.transparent,
+      primaryColor: Color.fromRGBO(235,77, 68, 1),),
     home: TutorialHome(),
   ));
 }
@@ -21,6 +24,7 @@ class TutorialHome extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<TutorialHome> {
+  final pageController = PageController();
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -32,10 +36,10 @@ class _MyStatefulWidgetState extends State<TutorialHome> {
       ..add(ScrollVideoPage())
       ..add(UserPage())
       ..add(FrientEventPage())
-      ..add(AcountPage());
+      ..add(StartPage());
       super.initState();
   }
-  void _onItemTapped(int index) {
+  void onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -44,7 +48,11 @@ class _MyStatefulWidgetState extends State<TutorialHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: pages[_selectedIndex],
+      body: PageView(
+        children:pages,
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
@@ -61,7 +69,7 @@ class _MyStatefulWidgetState extends State<TutorialHome> {
             title: Text('我的'),
           ), 
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.people),
             title: Text('朋友'),
           ), 
           BottomNavigationBarItem(
@@ -72,7 +80,9 @@ class _MyStatefulWidgetState extends State<TutorialHome> {
         currentIndex: _selectedIndex,
         selectedItemColor: Color.fromRGBO(235,77, 68, 1),
         unselectedItemColor: Colors.grey,        
-        onTap: _onItemTapped,
+        onTap: (int index) {
+          pageController.jumpToPage(index);
+        },
         type: BottomNavigationBarType.fixed,
       ),
     );

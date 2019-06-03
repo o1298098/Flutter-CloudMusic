@@ -11,9 +11,15 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/actions/Adapt.dart';
 
-class DiscoverPage extends StatelessWidget {
+class DiscoverPage extends StatefulWidget {
+ DiscoverPageState createState()=> DiscoverPageState(); 
+}
+class DiscoverPageState extends State<DiscoverPage>with AutomaticKeepAliveClientMixin{
+ @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ScreenUtil.instance = ScreenUtil(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height)

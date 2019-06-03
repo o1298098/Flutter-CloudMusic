@@ -1,14 +1,15 @@
 import 'dart:convert' show json;
 import 'package:cloudmusic/model/enum/commentliketype.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:cloudmusic/model/model.dart';
 
 class CloudMusicApiHelper {
   static const String _apihost = 'https://music.aityp.com';
-
-  static Future<void> login(String phone, String pwd) async {
+  static Future<UserInfo> login(String phone, String pwd) async {
     String params = '/login/cellphone?phone=$phone&password=$pwd';
-    await httpGet(params);
+    var str = await httpGet(params);
+    return UserInfo(str);
   }
 
   static Future<BannerModel> getBanners() async {
@@ -48,6 +49,7 @@ class CloudMusicApiHelper {
 
   static Future<String> httpGet(String params) async {
     var dio = new Dio();
+    dio.cookieJar=new PersistCookieJar(dir:"./cookies");
     var response = await dio.get(_apihost + params);
     var _content = json.encode(response.data);
     return _content;

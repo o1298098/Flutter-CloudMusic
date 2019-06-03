@@ -35,6 +35,7 @@ dependencies:
   share: ^0.6.1
   intl: ^0.15.8
   common_utils: ^1.1.1
+  fluttie: ^0.3.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - images/ic_runman_w.png
     - images/ic_mic_b.png
     - images/CacheBG.jpg
+    - images/circlewave.json
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
