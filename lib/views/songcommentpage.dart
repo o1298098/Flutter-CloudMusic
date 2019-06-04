@@ -1,8 +1,8 @@
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/actions/timeline.dart';
-import 'package:cloudmusic/model/enum/commentliketype.dart';
-import 'package:cloudmusic/model/model.dart';
+import 'package:cloudmusic/models/enum/commentliketype.dart';
+import 'package:cloudmusic/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:common_utils/common_utils.dart';
 

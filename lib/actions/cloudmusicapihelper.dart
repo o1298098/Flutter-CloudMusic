@@ -1,15 +1,29 @@
 import 'dart:convert' show json;
-import 'package:cloudmusic/model/enum/commentliketype.dart';
+import 'dart:io';
+import 'package:cloudmusic/models/enum/cloudmusicvideogroup.dart';
+import 'package:cloudmusic/models/enum/commentliketype.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:cloudmusic/model/model.dart';
+import 'package:cloudmusic/models/model.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CloudMusicApiHelper {
   static const String _apihost = 'https://music.aityp.com';
-  static Future<UserInfo> login(String phone, String pwd) async {
+  static String appDocPath;
+  static Future<void> getCookieDir() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    appDocPath = appDocDir.path;
+  }
+
+  static Future<bool> login(String phone, String pwd) async {
+
     String params = '/login/cellphone?phone=$phone&password=$pwd';
     var str = await httpGet(params);
-    return UserInfo(str);
+    if(str==null)
+    {
+      return false;
+    }
+    return true;
   }
 
   static Future<BannerModel> getBanners() async {
@@ -25,33 +39,49 @@ class CloudMusicApiHelper {
   }
 
   static Future<NewAlbumModel> getNewAlbums(int limit, int offset) async {
-    String param ='/top/album?offset=$offset&limit=$limit';
+    String param = '/top/album?offset=$offset&limit=$limit';
     var str = await httpGet(param);
     return NewAlbumModel(str);
   }
+
   static Future<MusicPlayList> playListDetial(int id) async {
-     String param = '/playlist/detail?id=$id';
+    String param = '/playlist/detail?id=$id';
     var str = await httpGet(param);
     return MusicPlayList(str);
   }
-  static Future<SongCommentModel> songComments(int id,int limit,int offset) async {
-     String param = '/comment/music?id=$id&limit=$limit&offset=$offset';
+  static Future<VideoGroupMpdel> getVideo(int id,int limit,int offset) async {
+    String param = '/video/group?id=$id&limit=$limit&offset=$offset';
+    var str = await httpGet(param);
+    return VideoGroupMpdel(str);
+  }
+
+  static Future<SongCommentModel> songComments(
+      int id, int limit, int offset) async {
+    String param = '/comment/music?id=$id&limit=$limit&offset=$offset';
     var str = await httpGet(param);
     return SongCommentModel(str);
   }
 
-  static Future<void> clickLike(int id,int cid,bool like,CommentLikeType type)
-  async{
-    String t=like?'1':'0';
-    String param='/comment/like?id=$id&cid=$cid&$t=1&type='+type.index.toString();
+  static Future<void> clickLike(
+      int id, int cid, bool like, CommentLikeType type) async {
+    String t = like ? '1' : '0';
+    String param =
+        '/comment/like?id=$id&cid=$cid&$t=1&type=' + type.index.toString();
     await httpGet(param);
   }
 
   static Future<String> httpGet(String params) async {
-    var dio = new Dio();
-    dio.cookieJar=new PersistCookieJar(dir:"./cookies");
-    var response = await dio.get(_apihost + params);
-    var _content = json.encode(response.data);
-    return _content;
+    try {
+      if (appDocPath == null) {
+       await getCookieDir();
+      }
+      var dio = new Dio();
+      dio.cookieJar=new PersistCookieJar(dir:"$appDocPath/cookies");
+      var response = await dio.get(_apihost + params);
+      var _content = json.encode(response.data);
+      return _content;
+    } on DioError catch (e) {
+      return null;
+    }
   }
 }

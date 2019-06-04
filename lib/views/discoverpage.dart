@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloudmusic/actions/counTostr.dart';
-import 'package:cloudmusic/pages/playlistpage.dart';
+import 'package:cloudmusic/views/playlistpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
-import 'package:cloudmusic/model/model.dart';
+import 'package:cloudmusic/models/model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

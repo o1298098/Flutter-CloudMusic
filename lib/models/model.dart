@@ -7,4 +7,5 @@ part 'personalized.dart';
 part 'newalbum.dart';
 part 'musicplaylist.dart';
 part 'songcomment.dart';
-part 'userinfo.dart';
+part 'accountinfo.dart';
+part 'videogroup.dart';

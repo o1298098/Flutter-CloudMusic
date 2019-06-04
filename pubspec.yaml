@@ -35,7 +35,7 @@ dependencies:
   share: ^0.6.1
   intl: ^0.15.8
   common_utils: ^1.1.1
-  fluttie: ^0.3.2
+  chewie: ^0.9.7
 
 dev_dependencies:
   flutter_test:

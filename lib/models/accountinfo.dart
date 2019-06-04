@@ -1,6 +1,6 @@
 
 part of model;
-class UserInfo {
+class AccountInfo {
 
   int code;
   int loginType;
@@ -8,11 +8,11 @@ class UserInfo {
   Account account;
   Profile profile;
 
-  UserInfo.fromParams({this.code, this.loginType, this.bindings, this.account, this.profile});
+  AccountInfo.fromParams({this.code, this.loginType, this.bindings, this.account, this.profile});
 
-  factory UserInfo(jsonStr) => jsonStr == null ? null : jsonStr is String ? new UserInfo.fromJson(json.decode(jsonStr)) : new UserInfo.fromJson(jsonStr);
+  factory AccountInfo(jsonStr) => jsonStr == null ? null : jsonStr is String ? new AccountInfo.fromJson(json.decode(jsonStr)) : new AccountInfo.fromJson(jsonStr);
   
-  UserInfo.fromJson(jsonRes) {
+  AccountInfo.fromJson(jsonRes) {
     code = jsonRes['code'];
     loginType = jsonRes['loginType'];
     bindings = jsonRes['bindings'] == null ? null : [];

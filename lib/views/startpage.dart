@@ -1,5 +1,6 @@
 import 'package:cloudmusic/actions/Adapt.dart';
-import 'package:cloudmusic/pages/loginpage.dart';
+import 'package:cloudmusic/models/enum/loginpagetype.dart';
+import 'package:cloudmusic/views/loginpage.dart';
 import 'package:flutter/material.dart';
 
 class StartPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class StartPageState extends State<StartPage> {
               textColor: Colors.red,
               onPressed: () async{
                 await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
-                  return new LoginPage();
+                  return new LoginPage(pagetype:LoginPageType.phone);
                 }));
               },
               child: Text('手机号登录',style: TextStyle(fontSize: Adapt.px(30)),),
