@@ -524,6 +524,8 @@ class NewAlbumGroupState extends State<NewAlbumGroup> {
                     overflow: TextOverflow.clip,
                     maxLines: 2,
                     softWrap: true,
+                    style: TextStyle(
+                        fontSize: ScreenUtil(allowFontScaling: true).setSp(12)),
                   )
                 ],
               )));
