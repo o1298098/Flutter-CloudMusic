@@ -96,7 +96,7 @@ class SongCommentState extends State<SongCommentPage> {
                           c.content,
                           softWrap: true,
                           style: TextStyle(
-                              height: Adapt.px(2),
+                              height: 1.5,
                               color: Colors.black,
                               fontSize: Adapt.px(28)),
                         ),

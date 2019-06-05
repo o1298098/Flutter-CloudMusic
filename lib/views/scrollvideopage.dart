@@ -4,6 +4,7 @@ import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/models/enum/cloudmusicvideogroup.dart';
 import 'package:cloudmusic/models/model.dart';
+import 'package:cloudmusic/views/musicplayerpage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/views/videoplayeritem.dart';
@@ -258,19 +259,25 @@ class ScrollPageState extends State<ScrollVideoPage>
                                       children: <Widget>[
                                         IconButton(
                                           icon: Icon(Icons.thumb_up),
-                                          color:videoGroupMpdel.datas[index].data.praised?Colors.red: Colors.grey[600],
+                                          color: videoGroupMpdel
+                                                  .datas[index].data.praised
+                                              ? Colors.red
+                                              : Colors.grey[600],
                                           onPressed: () {
-                                            if(!videoGroupMpdel.datas[index].data.praised)
-                                            {
+                                            if (!videoGroupMpdel
+                                                .datas[index].data.praised) {
                                               setState(() {
-                                                videoGroupMpdel.datas[index].data.praised=true;
-                                                videoGroupMpdel.datas[index].data.praisedCount++;
+                                                videoGroupMpdel.datas[index]
+                                                    .data.praised = true;
+                                                videoGroupMpdel.datas[index]
+                                                    .data.praisedCount++;
                                               });
-                                            }
-                                            else{
+                                            } else {
                                               setState(() {
-                                                videoGroupMpdel.datas[index].data.praised=false;
-                                                videoGroupMpdel.datas[index].data.praisedCount--;
+                                                videoGroupMpdel.datas[index]
+                                                    .data.praised = false;
+                                                videoGroupMpdel.datas[index]
+                                                    .data.praisedCount--;
                                               });
                                             }
                                           },
@@ -295,7 +302,13 @@ class ScrollPageState extends State<ScrollVideoPage>
                                         IconButton(
                                           icon: Icon(Icons.comment),
                                           color: Colors.grey[600],
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            await Navigator.push(context,
+                                                new MaterialPageRoute(builder:
+                                                    (BuildContext context) {
+                                              return new MusicPlayerPage();
+                                            }));
+                                          },
                                         ),
                                         Container(
                                           width: Adapt.px(100),
