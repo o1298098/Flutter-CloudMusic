@@ -9,3 +9,6 @@ part 'musicplaylist.dart';
 part 'songcomment.dart';
 part 'accountinfo.dart';
 part 'videogroup.dart';
+part 'videodetail.dart';
+part 'similarvideo.dart';
+part 'videourl.dart';

@@ -10,6 +10,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:share/share.dart';
 
+import 'musicvideopage.dart';
+
 class MusicPlayerPage extends StatefulWidget {
   final MusicPlayList playList;
   MusicPlayerPage({this.playList});
@@ -78,13 +80,12 @@ class MusicPlayerState extends State<MusicPlayerPage>
 
   Future<void> loadComment(int i) async {
     var r = await CloudMusicApiHelper.songComments(
-        playList.playlist.tracks[i].id, 1,0);
+        playList.playlist.tracks[i].id, 1, 0);
     commentcount = r.total;
   }
 
   void chageMusic(int i) async {
-    if(i>=playList.playlist.trackCount-1)
-    return;
+    if (i >= playList.playlist.trackCount - 1) return;
     await stop();
     await play('https://music.163.com/song/media/outer/url?id=' +
         playList.playlist.tracks[i].id.toString() +
@@ -322,24 +323,32 @@ class MusicPlayerState extends State<MusicPlayerPage>
                   color: Colors.grey[100],
                   width: Adapt.screenW(),
                 ),
-                Container(
-                  height: Adapt.px(100),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.slow_motion_video,
-                        color: Colors.grey[700],
-                        size: Adapt.px(65),
-                      ),
-                      SizedBox(
-                        width: Adapt.px(30),
-                      ),
-                      Text(
-                        '视频',
-                        style: TextStyle(fontSize: Adapt.px(26)),
-                      )
-                    ],
+                GestureDetector(
+                  onTap: () async {
+                    await Navigator.pushReplacement(context,
+                        new MaterialPageRoute(builder: (BuildContext context) {
+                      return new MusicVideoPage(vid: playList.playlist.tracks[musicindex].mv.toString());
+                    }));
+                  },
+                  child: Container(
+                    height: Adapt.px(100),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.slow_motion_video,
+                          color: Colors.grey[700],
+                          size: Adapt.px(65),
+                        ),
+                        SizedBox(
+                          width: Adapt.px(30),
+                        ),
+                        Text(
+                          '视频',
+                          style: TextStyle(fontSize: Adapt.px(26)),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -359,13 +368,22 @@ class MusicPlayerState extends State<MusicPlayerPage>
     super.initState();
     position = new Duration();
     audioPlayer.onAudioPositionChanged
-        .listen((p) => setState(() => position = p));
+        .listen((p){
+        if(p.inMilliseconds<=playList.playlist.tracks[musicindex].dt)
+        {
+        setState(() => position = p);
+        }
+        else{
+          chageMusic(musicindex+1);
+        }
+        }
+        );
     play('https://music.163.com/song/media/outer/url?id=' +
         playList.playlist.tracks[0].id.toString() +
         '.mp3');
     discController = new SwiperController();
     animationController = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 5000));
+        vsync: this, duration: Duration(milliseconds: 6000));
     animation = Tween(begin: 0.0, end: 1.0).animate(animationController)
       ..addStatusListener((AnimationStatus e) {
         if (e == AnimationStatus.completed) {
@@ -458,7 +476,8 @@ class MusicPlayerState extends State<MusicPlayerPage>
                           onPressed: () async {
                             await Navigator.push(context, new MaterialPageRoute(
                                 builder: (BuildContext context) {
-                              return new SongCommentPage(id:playList.playlist.tracks[musicindex].id);
+                              return new SongCommentPage(
+                                  id: playList.playlist.tracks[musicindex].id);
                             }));
                           },
                           iconSize: 25,
@@ -469,7 +488,8 @@ class MusicPlayerState extends State<MusicPlayerPage>
                         //color: Colors.white,
                         child: Text(
                           CountTostr.commentCountChange(commentcount),
-                          style: TextStyle(color: Colors.white,fontSize: Adapt.px(18)),
+                          style: TextStyle(
+                              color: Colors.white, fontSize: Adapt.px(18)),
                         ),
                       )
                     ],

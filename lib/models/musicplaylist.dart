@@ -152,11 +152,13 @@ class Creator {
   String detailDescription;
   String nickname;
   String signature;
+  String userName;
 
-  Creator.fromParams({this.expertTags, this.experts, this.remarkName, this.accountStatus, this.authStatus, this.authority, this.avatarImgId, this.backgroundImgId, this.birthday, this.city, this.djStatus, this.gender, this.province, this.userId, this.userType, this.vipType, this.defaultAvatar, this.followed, this.mutual, this.avatarImgIdStr, this.avatarUrl, this.backgroundImgIdStr, this.backgroundUrl, this.description, this.detailDescription, this.nickname, this.signature});
+  Creator.fromParams({this.expertTags, this.userName, this.experts, this.remarkName, this.accountStatus, this.authStatus, this.authority, this.avatarImgId, this.backgroundImgId, this.birthday, this.city, this.djStatus, this.gender, this.province, this.userId, this.userType, this.vipType, this.defaultAvatar, this.followed, this.mutual, this.avatarImgIdStr, this.avatarUrl, this.backgroundImgIdStr, this.backgroundUrl, this.description, this.detailDescription, this.nickname, this.signature});
   
   Creator.fromJson(jsonRes) {
     expertTags = jsonRes['expertTags'];
+    userName = jsonRes['userName'];
     experts = jsonRes['experts'];
     remarkName = jsonRes['remarkName'];
     accountStatus = jsonRes['accountStatus'];
@@ -187,7 +189,7 @@ class Creator {
 
   @override
   String toString() {
-    return '{"expertTags": $expertTags,"experts": $experts,"remarkName": $remarkName,"accountStatus": $accountStatus,"authStatus": $authStatus,"authority": $authority,"avatarImgId": $avatarImgId,"backgroundImgId": $backgroundImgId,"birthday": $birthday,"city": $city,"djStatus": $djStatus,"gender": $gender,"province": $province,"userId": $userId,"userType": $userType,"vipType": $vipType,"defaultAvatar": $defaultAvatar,"followed": $followed,"mutual": $mutual,"avatarImgIdStr": ${avatarImgIdStr != null?'${json.encode(avatarImgIdStr)}':'null'},"avatarUrl": ${avatarUrl != null?'${json.encode(avatarUrl)}':'null'},"backgroundImgIdStr": ${backgroundImgIdStr != null?'${json.encode(backgroundImgIdStr)}':'null'},"backgroundUrl": ${backgroundUrl != null?'${json.encode(backgroundUrl)}':'null'},"description": ${description != null?'${json.encode(description)}':'null'},"detailDescription": ${detailDescription != null?'${json.encode(detailDescription)}':'null'},"nickname": ${nickname != null?'${json.encode(nickname)}':'null'},"signature": ${signature != null?'${json.encode(signature)}':'null'}}';
+    return '{"expertTags": $expertTags,"userName": ${userName != null?'${json.encode(userName)}':'null'},"experts": $experts,"remarkName": $remarkName,"accountStatus": $accountStatus,"authStatus": $authStatus,"authority": $authority,"avatarImgId": $avatarImgId,"backgroundImgId": $backgroundImgId,"birthday": $birthday,"city": $city,"djStatus": $djStatus,"gender": $gender,"province": $province,"userId": $userId,"userType": $userType,"vipType": $vipType,"defaultAvatar": $defaultAvatar,"followed": $followed,"mutual": $mutual,"avatarImgIdStr": ${avatarImgIdStr != null?'${json.encode(avatarImgIdStr)}':'null'},"avatarUrl": ${avatarUrl != null?'${json.encode(avatarUrl)}':'null'},"backgroundImgIdStr": ${backgroundImgIdStr != null?'${json.encode(backgroundImgIdStr)}':'null'},"backgroundUrl": ${backgroundUrl != null?'${json.encode(backgroundUrl)}':'null'},"description": ${description != null?'${json.encode(description)}':'null'},"detailDescription": ${detailDescription != null?'${json.encode(detailDescription)}':'null'},"nickname": ${nickname != null?'${json.encode(nickname)}':'null'},"signature": ${signature != null?'${json.encode(signature)}':'null'}}';
   }
 }
 

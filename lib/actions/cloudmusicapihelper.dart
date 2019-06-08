@@ -16,11 +16,9 @@ class CloudMusicApiHelper {
   }
 
   static Future<bool> login(String phone, String pwd) async {
-
     String params = '/login/cellphone?phone=$phone&password=$pwd';
     var str = await httpGet(params);
-    if(str==null)
-    {
+    if (str == null) {
       return false;
     }
     return true;
@@ -49,7 +47,8 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return MusicPlayList(str);
   }
-  static Future<VideoGroupMpdel> getVideo(int id,int limit,int offset) async {
+
+  static Future<VideoGroupMpdel> getVideo(int id, int limit, int offset) async {
     String param = '/video/group?id=$id&limit=$limit&offset=$offset';
     var str = await httpGet(param);
     return VideoGroupMpdel(str);
@@ -58,6 +57,12 @@ class CloudMusicApiHelper {
   static Future<SongCommentModel> songComments(
       int id, int limit, int offset) async {
     String param = '/comment/music?id=$id&limit=$limit&offset=$offset';
+    var str = await httpGet(param);
+    return SongCommentModel(str);
+  }
+  static Future<SongCommentModel> videoComments(
+      String id, int limit, int offset) async {
+    String param = '/comment/video?id=$id&limit=$limit&offset=$offset';
     var str = await httpGet(param);
     return SongCommentModel(str);
   }
@@ -70,13 +75,29 @@ class CloudMusicApiHelper {
     await httpGet(param);
   }
 
+  static Future<VideoDetialInfoModel> videoDetail(String vid) async{
+    String param = '/video/detail?id=$vid';
+    var str = await httpGet(param);
+    return VideoDetialInfoModel(str);
+  }
+   static Future<VideoUrlModel> videoUrl(String vid) async{
+    String param = '/video/url?id=$vid';
+    var str = await httpGet(param);
+    return VideoUrlModel(str);
+  }
+  static Future<SimilarVideoModel> similarVideo(String vid) async{
+    String param = '/related/allvideo?id=$vid';
+    var str = await httpGet(param);
+    return SimilarVideoModel(str);
+  }
+
   static Future<String> httpGet(String params) async {
     try {
       if (appDocPath == null) {
-       await getCookieDir();
+        await getCookieDir();
       }
       var dio = new Dio();
-      dio.cookieJar=new PersistCookieJar(dir:"$appDocPath/cookies");
+      dio.cookieJar = new PersistCookieJar(dir: "$appDocPath/cookies");
       var response = await dio.get(_apihost + params);
       var _content = json.encode(response.data);
       return _content;

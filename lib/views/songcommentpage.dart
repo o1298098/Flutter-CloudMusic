@@ -96,7 +96,7 @@ class SongCommentState extends State<SongCommentPage> {
                           c.content,
                           softWrap: true,
                           style: TextStyle(
-                              height: 1.5,
+                              height: 1.2,
                               color: Colors.black,
                               fontSize: Adapt.px(28)),
                         ),
@@ -161,7 +161,6 @@ class SongCommentState extends State<SongCommentPage> {
 
   @override
   void initState() {
-    setLocaleInfo('zh_cloudmusic', CloudMusicTimelineInfoCN());
     id = widget.id;
     scrollController.addListener(scrollUpover);
     loadComment();

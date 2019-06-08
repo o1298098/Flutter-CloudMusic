@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloudmusic/actions/counTostr.dart';
 import 'package:cloudmusic/views/playlistpage.dart';
@@ -10,6 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/actions/Adapt.dart';
+
+import 'customwidgets/sliverappbardelegate.dart';
 
 class DiscoverPage extends StatefulWidget {
  DiscoverPageState createState()=> DiscoverPageState(); 
@@ -263,7 +265,7 @@ class DiscoverPageState extends State<DiscoverPage>with AutomaticKeepAliveClient
       slivers: <Widget>[
         SliverPersistentHeader(
           pinned: true,
-          delegate: _SliverAppBarDelegate(
+          delegate: SliverAppBarDelegate(
             minHeight: 100,
             maxHeight: 100,
             child: searchGroup,
@@ -286,36 +288,6 @@ class DiscoverPageState extends State<DiscoverPage>with AutomaticKeepAliveClient
   }
 }
 
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
-  });
-
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => math.max(maxHeight, minHeight);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
-  }
-}
 
 class CircleInfo {
   String url;

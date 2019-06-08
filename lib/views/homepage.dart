@@ -1,4 +1,6 @@
+import 'package:cloudmusic/actions/timeline.dart';
 import 'package:cloudmusic/views/startpage.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/views/discoverpage.dart';
 import 'package:cloudmusic/views/userpage.dart';
@@ -21,6 +23,7 @@ class _MyStatefulWidgetState extends State<TutorialHome> {
       List<Widget> pages = List<Widget>();
   @override
   void initState() {
+    setLocaleInfo('zh_cloudmusic', CloudMusicTimelineInfoCN());
     pages
       ..add(DiscoverPage())
       ..add(ScrollVideoPage())
