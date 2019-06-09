@@ -12,3 +12,4 @@ part 'videogroup.dart';
 part 'videodetail.dart';
 part 'similarvideo.dart';
 part 'videourl.dart';
+part 'playlist.dart';

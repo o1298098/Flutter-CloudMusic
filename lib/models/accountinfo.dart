@@ -113,7 +113,7 @@ class Profile {
 
 class Account {
 
-  int ban;
+  Object ban;
   int baoyueVersion;
   int createTime;
   int donateVersion;

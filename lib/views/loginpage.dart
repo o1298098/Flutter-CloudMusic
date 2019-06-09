@@ -112,12 +112,12 @@ class LoginPageState extends State<LoginPage> {
                 autofocus: true,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(2),
+                  contentPadding: EdgeInsets.all(8),
                   hintText: '输入密码',
                   errorText: errtxt,
                   suffix: IconButton(
                     alignment: Alignment.bottomCenter,
-                    iconSize: Adapt.px(40),
+                    iconSize: Adapt.px(30),
                     padding: EdgeInsets.all(0),
                     icon: isshowpwd
                         ? Icon(Icons.visibility_off)

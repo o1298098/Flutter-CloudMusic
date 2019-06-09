@@ -1,11 +1,11 @@
 import 'dart:convert' show json;
 import 'dart:io';
-import 'package:cloudmusic/models/enum/cloudmusicvideogroup.dart';
 import 'package:cloudmusic/models/enum/commentliketype.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:cloudmusic/models/model.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CloudMusicApiHelper {
   static const String _apihost = 'https://music.aityp.com';
@@ -18,6 +18,10 @@ class CloudMusicApiHelper {
   static Future<bool> login(String phone, String pwd) async {
     String params = '/login/cellphone?phone=$phone&password=$pwd';
     var str = await httpGet(params);
+    var r=AccountInfo(str);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', r.account.userName);
+    prefs.setInt('userId', r.account.id);
     if (str == null) {
       return false;
     }
@@ -89,6 +93,11 @@ class CloudMusicApiHelper {
     String param = '/related/allvideo?id=$vid';
     var str = await httpGet(param);
     return SimilarVideoModel(str);
+  }
+  static Future<PlayListModel> userPlayLIst(int uid) async{
+    String param = '/user/playlist?uid=$uid';
+    var str = await httpGet(param);
+    return PlayListModel(str);
   }
 
   static Future<String> httpGet(String params) async {

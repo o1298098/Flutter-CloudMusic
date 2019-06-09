@@ -244,7 +244,7 @@ class PlayListPageState extends State<PlayListPage> {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 10,
+                                                  width: 10,
                                                 ),
                                                 Text(
                                                     s.playlist.creator.nickname,
