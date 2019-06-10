@@ -4,7 +4,6 @@ import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/models/enum/cloudmusicvideogroup.dart';
 import 'package:cloudmusic/models/model.dart';
-import 'package:cloudmusic/views/musicplayerpage.dart';
 import 'package:cloudmusic/views/musicvideopage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

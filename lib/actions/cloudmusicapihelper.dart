@@ -10,9 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CloudMusicApiHelper {
   static const String _apihost = 'https://music.aityp.com';
   static String appDocPath;
+  static CookieJar cj;
   static Future<void> getCookieDir() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     appDocPath = appDocDir.path;
+    cj= new PersistCookieJar(dir: "$appDocPath/cookies");
   }
 
   static Future<bool> login(String phone, String pwd) async {
@@ -22,6 +24,7 @@ class CloudMusicApiHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username', r.account.userName);
     prefs.setInt('userId', r.account.id);
+    prefs.setInt('userVipType', r.account.vipType);
     if (str == null) {
       return false;
     }
@@ -99,6 +102,11 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return PlayListModel(str);
   }
+  static Future<FriendEventModel> userFriendEvent(int pagesize,int lasttime) async{
+    String param = '/event?pagesize=$pagesize&lasttime=$lasttime';
+    var str = await httpGet(param);
+    return FriendEventModel(str);
+  }
 
   static Future<String> httpGet(String params) async {
     try {
@@ -106,7 +114,7 @@ class CloudMusicApiHelper {
         await getCookieDir();
       }
       var dio = new Dio();
-      dio.cookieJar = new PersistCookieJar(dir: "$appDocPath/cookies");
+      dio.cookieJar = cj;
       var response = await dio.get(_apihost + params);
       var _content = json.encode(response.data);
       return _content;
