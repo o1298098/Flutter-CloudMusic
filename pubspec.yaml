@@ -82,6 +82,15 @@ flutter:
     - images/ic_circlemuscib_b.png
     - images/ic_musicb_b.png
     - images/ic_userwstar_b.png
+    - images/ic_moon.png
+    - images/ic_mic2_b.png
+    - images/ic_clock2.png
+    - images/ic_clock.png
+    - images/ic_scan_b.png
+    - images/ic_setting_b.png
+    - images/ic_ticket.png
+    - images/ic_box_b.png
+    - images/ic_music_cb.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

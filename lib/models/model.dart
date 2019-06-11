@@ -18,3 +18,4 @@ part 'similarvideo.dart';
 part 'videourl.dart';
 part 'playlist.dart';
 part 'friendeventmodel.dart';
+part 'accountdetail.dart';

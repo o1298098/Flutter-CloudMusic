@@ -211,13 +211,13 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                             bottom: Adapt.px(25)),
                         child: Image.asset(
                           'images/ic_musicb_b.png',
-                          width: Adapt.px(60),
+                          width: Adapt.px(50),
                         ),
                       ),
                       Text(
                         '本地音乐',
                         style: TextStyle(
-                            color: Colors.black, fontSize: Adapt.px(35)),
+                            color: Colors.black, fontSize: Adapt.px(30)),
                       ),
                       Expanded(
                         child: Container(),
@@ -249,13 +249,13 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                             bottom: Adapt.px(25)),
                         child: Image.asset(
                           'images/ic_playwbar_b.png',
-                          width: Adapt.px(60),
+                          width: Adapt.px(50),
                         ),
                       ),
                       Text(
                         '最近播放',
                         style: TextStyle(
-                            color: Colors.black, fontSize: Adapt.px(35)),
+                            color: Colors.black, fontSize: Adapt.px(30)),
                       ),
                       Expanded(
                         child: Container(),
@@ -287,13 +287,13 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                             bottom: Adapt.px(25)),
                         child: Image.asset(
                           'images/ic_circlemuscib_b.png',
-                          width: Adapt.px(60),
+                          width: Adapt.px(50),
                         ),
                       ),
                       Text(
                         '我的电台',
                         style: TextStyle(
-                            color: Colors.black, fontSize: Adapt.px(35)),
+                            color: Colors.black, fontSize: Adapt.px(30)),
                       ),
                       Expanded(
                         child: Container(),
@@ -325,13 +325,13 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                             bottom: Adapt.px(25)),
                         child: Image.asset(
                           'images/ic_userwstar_b.png',
-                          width: Adapt.px(60),
+                          width: Adapt.px(50),
                         ),
                       ),
                       Text(
                         '我的收藏',
                         style: TextStyle(
-                            color: Colors.black, fontSize: Adapt.px(35)),
+                            color: Colors.black, fontSize: Adapt.px(30)),
                       ),
                       Expanded(
                         child: Container(),
@@ -370,7 +370,7 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                   ),
                   Text('我创建的歌单',
                       style: TextStyle(
-                          color: Colors.black, fontSize: Adapt.px(35))),
+                          color: Colors.black, fontSize: Adapt.px(32),fontWeight: FontWeight.w600)),
                   Text('($playlistcount)',
                       style: TextStyle(
                           color: Colors.grey[500], fontSize: Adapt.px(25))),
@@ -413,7 +413,7 @@ class UserPageState extends State<UserPage> with AutomaticKeepAliveClientMixin{
                   ),
                   Text('我收藏的歌单',
                       style: TextStyle(
-                          color: Colors.black, fontSize: Adapt.px(35))),
+                          color: Colors.black, fontSize: Adapt.px(32),fontWeight: FontWeight.w600)),
                   Text('($subplaylistcount)',
                       style: TextStyle(
                           color: Colors.grey[500], fontSize: Adapt.px(25))),

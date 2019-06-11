@@ -14,21 +14,29 @@ class CloudMusicApiHelper {
   static Future<void> getCookieDir() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     appDocPath = appDocDir.path;
-    cj= new PersistCookieJar(dir: "$appDocPath/cookies");
+    cj = new PersistCookieJar(dir: "$appDocPath/cookies");
   }
 
   static Future<bool> login(String phone, String pwd) async {
     String params = '/login/cellphone?phone=$phone&password=$pwd';
     var str = await httpGet(params);
-    var r=AccountInfo(str);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', r.account.userName);
-    prefs.setInt('userId', r.account.id);
-    prefs.setInt('userVipType', r.account.vipType);
     if (str == null) {
       return false;
+    } else {
+      var r = AccountInfo(str);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', r.profile.nickname);
+      prefs.setInt('userId', r.account.id);
+      prefs.setInt('userVipType', r.profile.vipType);
+      prefs.setString('usericon', r.profile.avatarUrl);
     }
     return true;
+  }
+
+  static Future<AccountDetailModel> accountDetal(int uid) async {
+    String param = "/user/detail?uid=$uid";
+    var str = await httpGet(param);
+    return new AccountDetailModel(str);
   }
 
   static Future<BannerModel> getBanners() async {
@@ -67,6 +75,7 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return SongCommentModel(str);
   }
+
   static Future<SongCommentModel> videoComments(
       String id, int limit, int offset) async {
     String param = '/comment/video?id=$id&limit=$limit&offset=$offset';
@@ -82,27 +91,32 @@ class CloudMusicApiHelper {
     await httpGet(param);
   }
 
-  static Future<VideoDetialInfoModel> videoDetail(String vid) async{
+  static Future<VideoDetialInfoModel> videoDetail(String vid) async {
     String param = '/video/detail?id=$vid';
     var str = await httpGet(param);
     return VideoDetialInfoModel(str);
   }
-   static Future<VideoUrlModel> videoUrl(String vid) async{
+
+  static Future<VideoUrlModel> videoUrl(String vid) async {
     String param = '/video/url?id=$vid';
     var str = await httpGet(param);
     return VideoUrlModel(str);
   }
-  static Future<SimilarVideoModel> similarVideo(String vid) async{
+
+  static Future<SimilarVideoModel> similarVideo(String vid) async {
     String param = '/related/allvideo?id=$vid';
     var str = await httpGet(param);
     return SimilarVideoModel(str);
   }
-  static Future<PlayListModel> userPlayLIst(int uid) async{
+
+  static Future<PlayListModel> userPlayLIst(int uid) async {
     String param = '/user/playlist?uid=$uid';
     var str = await httpGet(param);
     return PlayListModel(str);
   }
-  static Future<FriendEventModel> userFriendEvent(int pagesize,int lasttime) async{
+
+  static Future<FriendEventModel> userFriendEvent(
+      int pagesize, int lasttime) async {
     String param = '/event?pagesize=$pagesize&lasttime=$lasttime';
     var str = await httpGet(param);
     return FriendEventModel(str);

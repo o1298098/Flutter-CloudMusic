@@ -19,22 +19,37 @@ class FrientEventPageState extends State<FrientEventPage>
   AnimationController segmentAnimationController;
   Animation<Offset> segmentAnimation;
   FriendEventModel femodel;
+  ScrollController scrollController = new ScrollController();
   bool segmentState = false;
+  bool isBusy = false;
   int lasttime = -1;
   int eventcount = 0;
   double rightwidth = Adapt.screenW() - Adapt.px(110);
 
   void getFriendEvent() async {
+    setState(() {
+      isBusy = true;
+    });
     var pre = await SharedPreferences.getInstance();
     int uid = pre.getInt('userId');
     if (uid != null) {
       var r = await CloudMusicApiHelper.userFriendEvent(30, lasttime);
       if (r.code == 200) {
-        setState(() {
-          femodel = r;
-          lasttime=r.lasttime;
-        });
+        if (femodel == null) {
+          setState(() {
+            femodel = r;
+            lasttime = r.lasttime;
+          });
+        } else {
+          setState(() {
+            femodel.event.addAll(r.event);
+            lasttime = r.lasttime;
+          });
+        }
       }
+      setState(() {
+        isBusy = false;
+      });
     }
   }
 
@@ -134,9 +149,13 @@ class FrientEventPageState extends State<FrientEventPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(d.jsonstr.song.name,
-                    style:
-                        TextStyle(color: Colors.black, fontSize: Adapt.px(26))),
+                Container(
+                  width: Adapt.screenW() * 0.6,
+                  child: Text(d.jsonstr.song.name,
+                      softWrap: true,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black, fontSize: Adapt.px(26))),
+                ),
                 Text(
                   d.jsonstr.song.artists[0].name,
                   style: TextStyle(
@@ -234,7 +253,7 @@ class FrientEventPageState extends State<FrientEventPage>
             child: Row(
               children: <Widget>[
                 Container(
-                  width: Adapt.px(120),
+                  width: Adapt.px(150),
                   child: RaisedButton(
                     padding: EdgeInsets.only(left: 0),
                     elevation: 0.0,
@@ -261,7 +280,7 @@ class FrientEventPageState extends State<FrientEventPage>
                   ),
                 ),
                 Container(
-                  width: Adapt.px(120),
+                  width: Adapt.px(150),
                   child: RaisedButton(
                     padding: EdgeInsets.only(left: 0),
                     elevation: 0.0,
@@ -287,7 +306,7 @@ class FrientEventPageState extends State<FrientEventPage>
                   ),
                 ),
                 Container(
-                  width: Adapt.px(120),
+                  width: Adapt.px(150),
                   child: RaisedButton(
                     padding: EdgeInsets.only(left: 0),
                     elevation: 0.0,
@@ -332,12 +351,7 @@ class FrientEventPageState extends State<FrientEventPage>
   Widget getFriengEventCells() {
     if (femodel == null) {
       return SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.all(30),
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        child: Container(),
       );
     } else {
       return SliverList(
@@ -354,7 +368,20 @@ class FrientEventPageState extends State<FrientEventPage>
     segmentAnimation = Tween<Offset>(begin: Offset.zero, end: Offset(1.0, 0.0))
         .animate(segmentAnimationController);
     getFriendEvent();
+    scrollController.addListener(() {
+      bool isBottom = scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent;
+      if (isBottom) {
+        getFriendEvent();
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -381,7 +408,7 @@ class FrientEventPageState extends State<FrientEventPage>
             Expanded(
               child: Center(
                 child: Container(
-                    width: Adapt.px(193),
+                    width: Adapt.px(192),
                     height: Adapt.px(50),
                     decoration: BoxDecoration(
                         border:
@@ -471,6 +498,7 @@ class FrientEventPageState extends State<FrientEventPage>
         ),
       ),
       body: CustomScrollView(
+        controller: scrollController,
         slivers: <Widget>[
           SliverPersistentHeader(
             floating: true,
@@ -533,6 +561,18 @@ class FrientEventPageState extends State<FrientEventPage>
             ),
           ),
           getFriengEventCells(),
+          SliverToBoxAdapter(
+              child: Container(
+            height: Adapt.px(80),
+            padding: EdgeInsets.all(Adapt.px(5)),
+            child: Center(
+              child: isBusy
+                  ? CircularProgressIndicator(
+                      strokeWidth: Adapt.px(3),
+                    )
+                  : null,
+            ),
+          ))
         ],
       ),
     );
