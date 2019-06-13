@@ -16,5 +16,6 @@ A flutter version of the NeteaseCloudMusic app.
 - [x] AudioPlayer  
 - [x] VideoPlayer
 - [ ] AudioVisualizer
+- [ ] Fish-Redux
 
 

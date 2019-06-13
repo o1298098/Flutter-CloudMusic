@@ -19,3 +19,6 @@ part 'videourl.dart';
 part 'playlist.dart';
 part 'friendeventmodel.dart';
 part 'accountdetail.dart';
+part 'musicvideomodel.dart';
+part 'similarmusicvideo.dart';
+part 'musicvideourl.dart';

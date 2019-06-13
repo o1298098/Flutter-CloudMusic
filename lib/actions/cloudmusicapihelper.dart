@@ -11,6 +11,7 @@ class CloudMusicApiHelper {
   static const String _apihost = 'https://music.aityp.com';
   static String appDocPath;
   static CookieJar cj;
+
   static Future<void> getCookieDir() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     appDocPath = appDocDir.path;
@@ -82,6 +83,12 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return SongCommentModel(str);
   }
+  static Future<SongCommentModel> musicVideoComments(
+      int id, int limit, int offset) async {
+    String param = '/comment/mv?id=$id&limit=$limit&offset=$offset';
+    var str = await httpGet(param);
+    return SongCommentModel(str);
+  }
 
   static Future<void> clickLike(
       int id, int cid, bool like, CommentLikeType type) async {
@@ -96,17 +103,35 @@ class CloudMusicApiHelper {
     var str = await httpGet(param);
     return VideoDetialInfoModel(str);
   }
-
+  
+  static Future<MusicVideoModel> musicVideoDetail(int mvid) async {
+    String param = '/mv/detail?mvid=$mvid';
+    var str = await httpGet(param);
+    return MusicVideoModel(str);
+  }
+  
   static Future<VideoUrlModel> videoUrl(String vid) async {
     String param = '/video/url?id=$vid';
     var str = await httpGet(param);
     return VideoUrlModel(str);
+  }
+  
+  static Future<MusicVideoUrlModel> musicVideoUrl(int mvid) async {
+    String param = '/mv/url?id=$mvid';
+    var str = await httpGet(param);
+    return MusicVideoUrlModel(str);
   }
 
   static Future<SimilarVideoModel> similarVideo(String vid) async {
     String param = '/related/allvideo?id=$vid';
     var str = await httpGet(param);
     return SimilarVideoModel(str);
+  }
+  
+  static Future<SimilarMusicVideoModel> similarMusicVideo(int mvid) async {
+    String param = '/simi/mv?mvid=$mvid';
+    var str = await httpGet(param);
+    return SimilarMusicVideoModel(str);
   }
 
   static Future<PlayListModel> userPlayLIst(int uid) async {

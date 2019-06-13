@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/actions/counTostr.dart';
+import 'package:cloudmusic/views/artistdetailpage/page.dart';
 import 'package:cloudmusic/views/songcommentpage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/models/model.dart';
@@ -66,7 +67,7 @@ class MusicPlayerState extends State<MusicPlayerPage>
   Future<void> stop() async {
     await audioPlayer.stop();
     animationController.stop();
-    needleAnimationController.animateTo(0);
+    //needleAnimationController.animateTo(0);
     setState(() {
       playerState = AudioPlayerState.STOPPED;
       animationstate = false;
@@ -323,31 +324,36 @@ class MusicPlayerState extends State<MusicPlayerPage>
                   color: Colors.grey[100],
                   width: Adapt.screenW(),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    await Navigator.pushReplacement(context,
-                        new MaterialPageRoute(builder: (BuildContext context) {
-                      return new MusicVideoPage(vid: playList.playlist.tracks[musicindex].mv.toString());
-                    }));
-                  },
-                  child: Container(
-                    height: Adapt.px(100),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.slow_motion_video,
-                          color: Colors.grey[700],
-                          size: Adapt.px(65),
-                        ),
-                        SizedBox(
-                          width: Adapt.px(30),
-                        ),
-                        Text(
-                          '视频',
-                          style: TextStyle(fontSize: Adapt.px(26)),
-                        )
-                      ],
+                Offstage(
+                  offstage: playList.playlist.tracks[musicindex].mv>0?true:false,
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(context,
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) {
+                        return new MusicVideoPage(
+                            vid: playList.playlist.tracks[musicindex].mv);
+                      }));
+                    },
+                    child: Container(
+                      height: Adapt.px(100),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.slow_motion_video,
+                            color: Colors.grey[700],
+                            size: Adapt.px(65),
+                          ),
+                          SizedBox(
+                            width: Adapt.px(30),
+                          ),
+                          Text(
+                            '视频',
+                            style: TextStyle(fontSize: Adapt.px(26)),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -367,17 +373,13 @@ class MusicPlayerState extends State<MusicPlayerPage>
   void initState() {
     super.initState();
     position = new Duration();
-    audioPlayer.onAudioPositionChanged
-        .listen((p){
-        if(p.inMilliseconds<=playList.playlist.tracks[musicindex].dt)
-        {
+    audioPlayer.onAudioPositionChanged.listen((p) {
+      if (p.inMilliseconds <= playList.playlist.tracks[musicindex].dt) {
         setState(() => position = p);
-        }
-        else{
-          chageMusic(musicindex+1);
-        }
-        }
-        );
+      } else {
+        chageMusic(musicindex + 1);
+      }
+    });
     play('https://music.163.com/song/media/outer/url?id=' +
         playList.playlist.tracks[0].id.toString() +
         '.mp3');
@@ -438,7 +440,14 @@ class MusicPlayerState extends State<MusicPlayerPage>
               Container(
                 height: Adapt.px(830),
                 margin: EdgeInsets.only(top: Adapt.px(230)),
-                child: new Swiper(
+                child:GestureDetector(
+                  onTapUp: (TapUpDetails e){
+                    needleAnimationController.forward(from: -0.09);
+                  },
+                  onTapDown: (TapDownDetails e){
+                     needleAnimationController.animateTo(0);
+                  },
+                  child: new Swiper(
                   controller: discController,
                   viewportFraction: 0.99999,
                   itemCount: playList.playlist.trackCount,
@@ -446,7 +455,7 @@ class MusicPlayerState extends State<MusicPlayerPage>
                     return getDisc(index);
                   },
                   onIndexChanged: (int i) => chageMusic(i),
-                ),
+                ),) ,
               ),
               Expanded(
                 child: Container(),

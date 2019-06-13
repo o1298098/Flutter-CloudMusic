@@ -4,10 +4,10 @@ import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/models/enum/cloudmusicvideogroup.dart';
 import 'package:cloudmusic/models/model.dart';
-import 'package:cloudmusic/views/musicvideopage.dart';
+import 'package:cloudmusic/views/videopage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cloudmusic/views/videoplayeritem.dart';
+import 'package:cloudmusic/views/customwidgets/videoplayeritem.dart';
 import 'package:flutter/rendering.dart';
 import 'package:video_player/video_player.dart';
 
@@ -305,7 +305,7 @@ class ScrollPageState extends State<ScrollVideoPage>
                                             await Navigator.push(context,
                                                 new MaterialPageRoute(builder:
                                                     (BuildContext context) {
-                                              return new MusicVideoPage(vid:videoGroupMpdel.datas[index].data.vid);
+                                              return new VideoPage(vid:videoGroupMpdel.datas[index].data.vid);
                                             }));
                                           },
                                         ),

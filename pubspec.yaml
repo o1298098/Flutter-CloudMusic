@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.15.8
   common_utils: ^1.1.1
   chewie: ^0.9.7
+  fish_redux: ^0.2.2
 
 dev_dependencies:
   flutter_test:

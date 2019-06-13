@@ -1,7 +1,8 @@
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/models/model.dart';
-import 'package:cloudmusic/views/videoplayeritem.dart';
+import 'package:cloudmusic/views/customwidgets/videoplayeritem.dart';
+import 'package:cloudmusic/views/videopage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -154,7 +155,8 @@ class FrientEventPageState extends State<FrientEventPage>
                   child: Text(d.jsonstr.song.name,
                       softWrap: true,
                       maxLines: 1,
-                      style: TextStyle(color: Colors.black, fontSize: Adapt.px(26))),
+                      style: TextStyle(
+                          color: Colors.black, fontSize: Adapt.px(26))),
                 ),
                 Text(
                   d.jsonstr.song.artists[0].name,
@@ -282,28 +284,34 @@ class FrientEventPageState extends State<FrientEventPage>
                 Container(
                   width: Adapt.px(150),
                   child: RaisedButton(
-                    padding: EdgeInsets.only(left: 0),
-                    elevation: 0.0,
-                    color: Colors.transparent,
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.comment,
-                          size: Adapt.px(30),
-                          color: Colors.grey[700],
-                        ),
-                        SizedBox(
-                          width: Adapt.px(10),
-                        ),
-                        Text(
-                          d.info.commentCount.toString(),
-                          style: TextStyle(
-                              color: Colors.grey[700], fontSize: Adapt.px(26)),
-                        )
-                      ],
-                    ),
-                    onPressed: () {},
-                  ),
+                      padding: EdgeInsets.only(left: 0),
+                      elevation: 0.0,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.comment,
+                            size: Adapt.px(30),
+                            color: Colors.grey[700],
+                          ),
+                          SizedBox(
+                            width: Adapt.px(10),
+                          ),
+                          Text(
+                            d.info.commentCount.toString(),
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: Adapt.px(26)),
+                          )
+                        ],
+                      ),
+                      onPressed: () async {
+                        if (d.jsonstr.video != null)
+                          await Navigator.push(context, new MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return new VideoPage(vid: d.jsonstr.video.videoId);
+                          }));
+                      }),
                 ),
                 Container(
                   width: Adapt.px(150),

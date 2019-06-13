@@ -10,6 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloudmusic/actions/Adapt.dart';
 
+import 'musicvideopage.dart';
+
 class PlayListPage extends StatefulWidget {
   final int id;
   PlayListPage({this.id});
@@ -40,9 +42,14 @@ class PlayListPageState extends State<PlayListPage> {
 
   Widget hasVideo(int i) {
     if (s.playlist.tracks[i].mv > 0) {
-      return Icon(
-        Icons.ondemand_video,
-        color: Colors.grey[400],
+      return IconButton(
+        icon:Icon(Icons.ondemand_video,color: Colors.grey[400],),
+        onPressed: () async {
+                      await Navigator.push(context,
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) {
+                        return new MusicVideoPage(vid: s.playlist.tracks[i].mv);
+                      }));}
       );
     } else {
       return SizedBox(
@@ -50,7 +57,6 @@ class PlayListPageState extends State<PlayListPage> {
       );
     }
   }
-
   Widget getView() {
     if (s == null) {
       return new Center(

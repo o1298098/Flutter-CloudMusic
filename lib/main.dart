@@ -1,9 +1,11 @@
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
+import 'package:cloudmusic/views/app.dart';
 import 'package:cloudmusic/views/homepage.dart';
 import 'package:cloudmusic/views/StartPage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
-Future main() async {
+void main()=> runApp(createApp());
+ /*async {
   runApp(new MaterialApp(
     title: 'Flutter Tutorial',
     theme: ThemeData(
@@ -16,7 +18,7 @@ Future main() async {
       '/start': (BuildContext context) => new StartPage()
     },
   ));
-}
+}*/
 Future<Widget> getStartPage()
 async{
   await CloudMusicApiHelper.getCookieDir();

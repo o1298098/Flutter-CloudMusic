@@ -11,7 +11,7 @@ import 'package:video_player/video_player.dart';
 import 'customwidgets/sliverappbardelegate.dart';
 
 class MusicVideoPage extends StatefulWidget {
-  final String vid;
+  final int vid;
   MusicVideoPage({this.vid});
   @override
   MusicVideoPageState createState() => new MusicVideoPageState();
@@ -22,10 +22,9 @@ class MusicVideoPageState extends State<MusicVideoPage> {
   String date = '';
   String playtime = '';
   String videourl;
-  VideoDetialInfoModel videoDetail;
-  SimilarVideoModel similarVideos;
+  MusicVideoModel videoDetail;
+  SimilarMusicVideoModel similarVideos;
   SongCommentModel videocomment;
-  VideoUrlModel videoUrlModel;
   ScrollController scrollController = new ScrollController();
   VideoPlayerController vc;
   ChewieController chewieController;
@@ -36,26 +35,22 @@ class MusicVideoPageState extends State<MusicVideoPage> {
   int commentcount = 0;
   int sharecount = 0;
   int loadedcommentcount = 0;
-  String vid;
+  int vid;
   bool isBusy = false;
   void getVideoInfo() async {
-    var r = await CloudMusicApiHelper.videoDetail(vid);
+    var r = await CloudMusicApiHelper.musicVideoDetail(vid);
     if (r.code == 200) {
       setState(() {
         videoDetail = r;
-        videoname = r.data.title;
-        playtime = CountTostr.chage(r.data.playTime);
-        likecount = r.data.praisedCount;
-        subcount = r.data.subscribeCount;
+        videoname = r.data.name;
+        playtime = CountTostr.chage(r.data.playCount);
+        likecount = r.data.likeCount;
+        subcount = r.data.subCount;
         commentcount = r.data.commentCount;
         sharecount = r.data.shareCount;
-        date = TimelineUtil.format(
-          r.data.publishTime,
-          locTimeMillis: DateTime.now().millisecondsSinceEpoch,
-          locale: 'zh_cloudmusic',
-        );
+        date = r.data.publishTime;
       });
-      var r2 = await CloudMusicApiHelper.similarVideo(vid);
+      var r2 = await CloudMusicApiHelper.similarMusicVideo(vid);
       if (r2.code == 200)
         setState(() {
           similarVideos = r2;
@@ -67,7 +62,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
     setState(() {
       isBusy = true;
     });
-    var r = await CloudMusicApiHelper.videoComments(vid, 30, offset);
+    var r = await CloudMusicApiHelper.musicVideoComments(vid, 30, offset);
     if (r.code == 200) {
       if (videocomment == null) {
         setState(() {
@@ -88,10 +83,18 @@ class MusicVideoPageState extends State<MusicVideoPage> {
 
   void getVideoUrl() async {
     if (videourl == null) {
-      var r = await CloudMusicApiHelper.videoUrl(vid);
-      if (r.code == 200) {
-        videourl = r.urls[0].url;
-        videoUrlModel = r;
+      if(videoDetail.data.brs.p1080!=null){
+        videourl = videoDetail.data.brs.p1080;
+      }
+      else if(videoDetail.data.brs.p720!=null){
+        videourl = videoDetail.data.brs.p720;
+      }
+      else if(videoDetail.data.brs.p480!=null){
+        videourl = videoDetail.data.brs.p480;
+      }
+      else if(videoDetail.data.brs.p240!=null){
+        videourl = videoDetail.data.brs.p240;
+      }
         vc = new VideoPlayerController.network(videourl);
         chewieController = new ChewieController(
           videoPlayerController: vc,
@@ -99,7 +102,6 @@ class MusicVideoPageState extends State<MusicVideoPage> {
           aspectRatio: 16 / 9,
           autoPlay: true,
         );
-      }
     }
   }
 
@@ -210,12 +212,12 @@ class MusicVideoPageState extends State<MusicVideoPage> {
     }
   }
 
-  Widget buildSimiVideoCell(SimilarVideoData d) {
+  Widget buildSimiVideoCell(MvData d) {
     return GestureDetector(
       onTap: () async {
         await Navigator.pushReplacement(context,
             new MaterialPageRoute(builder: (BuildContext context) {
-          return new MusicVideoPage(vid: d.vid);
+          return new MusicVideoPage(vid: d.id);
         }));
       },
       child: Container(
@@ -234,7 +236,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
                           fit: BoxFit.fill,
                           child: FadeInImage.assetNetwork(
                             placeholder: 'images/CacheBG.jpg',
-                            image: d.coverUrl,
+                            image: d.cover,
                           )),
                     ),
                     Row(
@@ -246,7 +248,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
                           size: Adapt.px(25),
                         ),
                         Text(
-                          CountTostr.chage(d.playTime),
+                          CountTostr.chage(d.playCount),
                           style: TextStyle(
                               color: Colors.white, fontSize: Adapt.px(25)),
                         ),
@@ -268,7 +270,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
                 Container(
                   width: Adapt.screenW() * 0.6,
                   child: Text(
-                    d.title,
+                    d.name,
                     maxLines: 2,
                     style:
                         TextStyle(fontSize: Adapt.px(25), color: Colors.black),
@@ -278,9 +280,9 @@ class MusicVideoPageState extends State<MusicVideoPage> {
                   width: Adapt.screenW() * 0.5,
                   child: Text(
                     (CountTostr.printduration(
-                            Duration(milliseconds: d.durationms)) +
+                            Duration(milliseconds: d.duration)) +
                         ' ' +
-                        d.creator[0].userName),
+                        d.artistName),
                     style: TextStyle(color: Colors.grey[500]),
                   ),
                 ),
@@ -292,7 +294,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
     );
   }
 
-  Widget getSimiVideoCells(SimilarVideoModel s) {
+  Widget getSimiVideoCells(SimilarMusicVideoModel s) {
     if (s == null)
       return Container();
     else
@@ -311,7 +313,7 @@ class MusicVideoPageState extends State<MusicVideoPage> {
           ),
           Container(
             padding: EdgeInsets.all(Adapt.px(20)),
-            child: Column(children: s.data.map(buildSimiVideoCell).toList()),
+            child: Column(children: s.mvs.map(buildSimiVideoCell).toList()),
           )
         ],
       );
@@ -330,14 +332,14 @@ class MusicVideoPageState extends State<MusicVideoPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Adapt.px(30)),
             image: DecorationImage(
-                image: NetworkImage(videoDetail.data.avatarUrl),
+                image: NetworkImage(videoDetail.data.cover),
                 fit: BoxFit.cover),
           ),
         ),
         SizedBox(
           width: Adapt.px(10),
         ),
-        Text(videoDetail.data.creator.nickname),
+        Text(videoDetail.data.artistName),
         Expanded(
           child: Container(),
         ),
@@ -388,8 +390,8 @@ class MusicVideoPageState extends State<MusicVideoPage> {
       }
     });
     getVideoInfo();
-    getVideoComments();
     getVideoUrl();
+    getVideoComments();
   }
 
   @override

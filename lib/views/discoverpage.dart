@@ -13,15 +13,9 @@ import 'package:cloudmusic/actions/Adapt.dart';
 
 import 'customwidgets/sliverappbardelegate.dart';
 
-class DiscoverPage extends StatefulWidget {
- DiscoverPageState createState()=> DiscoverPageState(); 
-}
-class DiscoverPageState extends State<DiscoverPage>with AutomaticKeepAliveClientMixin{
- @override
-  bool get wantKeepAlive => true;
+class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     ScreenUtil.instance = ScreenUtil(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height)
@@ -300,10 +294,12 @@ class Imageview extends StatefulWidget {
   ImageviewState createState() => ImageviewState();
 }
 
-class ImageviewState extends State<Imageview> {
+class ImageviewState extends State<Imageview> with AutomaticKeepAliveClientMixin{
   String url =
       'https://www.lodderoofing.com/wp-content/uploads/2018/04/grass-tips-wind-grey-sky.jpg';
   BannerModel s;
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     getBanner();
@@ -352,6 +348,7 @@ class ImageviewState extends State<Imageview> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new Container(
       height: Adapt.px(250),
       margin: EdgeInsets.only(bottom: 15),
