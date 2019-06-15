@@ -430,7 +430,8 @@ class PersonalizedGroupState extends State<PersonalizedGroup> {
                         fontSize: ScreenUtil(allowFontScaling: true).setSp(12)),
                   )
                 ],
-              ))));
+              )))
+              );
       setState(() {
         items = b;
       });

@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:cloudmusic/actions/Adapt.dart';
 import 'package:cloudmusic/actions/cloudmusicapihelper.dart';
 import 'package:cloudmusic/actions/counTostr.dart';
-import 'package:cloudmusic/views/artistdetailpage/page.dart';
 import 'package:cloudmusic/views/songcommentpage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloudmusic/models/model.dart';
@@ -35,51 +34,38 @@ class MusicPlayerState extends State<MusicPlayerPage>
   bool animationstate = false;
   AudioPlayerState playerState;
   Duration position;
-  Icon playicon;
-  Future<void> play(String url) async {
+  Future play(String url) async {
     await audioPlayer.play(url);
     animationController.forward();
     needleAnimationController.forward(from: -0.09);
     setState(() {
       playerState = AudioPlayerState.PLAYING;
       animationstate = true;
-      playicon = Icon(
-        Icons.pause_circle_outline,
-        color: Colors.white,
-      );
     });
   }
 
-  Future<void> pause() async {
+  Future pause() async {
     await audioPlayer.pause();
     animationController.stop();
     needleAnimationController.animateTo(0);
     setState(() {
       playerState = AudioPlayerState.PAUSED;
-      playicon = Icon(
-        Icons.play_circle_outline,
-        color: Colors.white,
-      );
       animationstate = false;
     });
   }
 
-  Future<void> stop() async {
+  Future stop() async {
     await audioPlayer.stop();
     animationController.stop();
     //needleAnimationController.animateTo(0);
     setState(() {
       playerState = AudioPlayerState.STOPPED;
       animationstate = false;
-      playicon = Icon(
-        Icons.play_circle_outline,
-        color: Colors.white,
-      );
       position = new Duration();
     });
   }
 
-  Future<void> loadComment(int i) async {
+  Future loadComment(int i) async {
     var r = await CloudMusicApiHelper.songComments(
         playList.playlist.tracks[i].id, 1, 0);
     commentcount = r.total;
@@ -325,12 +311,13 @@ class MusicPlayerState extends State<MusicPlayerPage>
                   width: Adapt.screenW(),
                 ),
                 Offstage(
-                  offstage: playList.playlist.tracks[musicindex].mv>0?true:false,
+                  offstage: playList.playlist.tracks[musicindex].mv > 0
+                      ? true
+                      : false,
                   child: GestureDetector(
                     onTap: () async {
-                      await Navigator.push(context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) {
+                      await Navigator.push(context, new MaterialPageRoute(
+                          builder: (BuildContext context) {
                         return new MusicVideoPage(
                             vid: playList.playlist.tracks[musicindex].mv);
                       }));
@@ -440,22 +427,23 @@ class MusicPlayerState extends State<MusicPlayerPage>
               Container(
                 height: Adapt.px(830),
                 margin: EdgeInsets.only(top: Adapt.px(230)),
-                child:GestureDetector(
-                  onTapUp: (TapUpDetails e){
+                child: GestureDetector(
+                  onTapUp: (TapUpDetails e) {
                     needleAnimationController.forward(from: -0.09);
                   },
-                  onTapDown: (TapDownDetails e){
-                     needleAnimationController.animateTo(0);
+                  onTapDown: (TapDownDetails e) {
+                    needleAnimationController.animateTo(0);
                   },
                   child: new Swiper(
-                  controller: discController,
-                  viewportFraction: 0.99999,
-                  itemCount: playList.playlist.trackCount,
-                  itemBuilder: (BuildContext context, int index) {
-                    return getDisc(index);
-                  },
-                  onIndexChanged: (int i) => chageMusic(i),
-                ),) ,
+                    controller: discController,
+                    viewportFraction: 0.99999,
+                    itemCount: playList.playlist.trackCount,
+                    itemBuilder: (BuildContext context, int index) {
+                      return getDisc(index);
+                    },
+                    onIndexChanged: (int i) => chageMusic(i),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(),
@@ -567,7 +555,12 @@ class MusicPlayerState extends State<MusicPlayerPage>
                     ),
                     IconButton(
                       iconSize: 65,
-                      icon: playicon,
+                      icon: Icon(
+                        playerState == AudioPlayerState.PLAYING
+                            ? Icons.pause_circle_outline
+                            : Icons.play_circle_outline,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         playerState == AudioPlayerState.PLAYING
                             ? pause()
